@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: locust-worker
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: locust
+        role: worker
+    spec:
+      containers:
+      - image: darumatic/locustio:20180510-1711
+        name: locust
+        env:
+          - name: LOCUST_MODE
+            value: worker
+          - name: LOCUST_MASTER
+            value: locaust-master
+          - name: TARGET_HOST
+            value: http://10.20.14.247:30048
+        resources:
+          requests:
+            memory: "256M"
+            cpu: "0.05"
+          limits:
+            memory: "0.5Gi"
+            cpu: "0.5"
+
+
+
