@@ -13,22 +13,34 @@ spec:
         role: worker
     spec:
       containers:
-      - image: darumatic/locustio:20180510-1711
+      - image: darumatic/locustio:20180510-2100
         name: locust
         env:
           - name: LOCUST_MODE
             value: worker
           - name: LOCUST_MASTER
-            value: locaust-master
+            value: locust-master
           - name: TARGET_HOST
-            value: http://10.20.14.247:30048
+            value: http://10.20.14.247:32760
         resources:
           requests:
-            memory: "256M"
+            memory: "32M"
             cpu: "0.05"
           limits:
-            memory: "0.5Gi"
+            memory: "128M"
             cpu: "0.5"
+        volumeMounts:
+        - mountPath: /locust-tasks/tasks.py
+          subPath: tasks.py
+          name: tasks
+      volumes:
+      - name: tasks
+        configMap:
+          name: tasks
+          items:
+          - key: tasks.py
+            path: tasks.py
+
 
 
 
